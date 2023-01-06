@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	// "fmt"
 	"github.com/google/uuid"
 	"io/ioutil"
 	"log"
@@ -39,7 +38,12 @@ func processReceipts(w http.ResponseWriter, r *http.Request){
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	var receipt Receipt
 	json.Unmarshal(reqBody, &receipt)
-	// TODO: Validate receipt JSON is in valid format
+	// Validate input receipt JSON is in valid format
+	isValid, errResponse := validateReceiptInput(receipt)
+	if (!isValid) {
+		json.NewEncoder(w).Encode(errResponse)
+		return
+	}
 	// Assign unique ID to receipt
 	receipt.Id = uuid.New().String()
 	// Add receipt to Receipts database
@@ -108,6 +112,44 @@ func getPoints(w http.ResponseWriter, r *http.Request){
 	// Build and return response
 	response := map[string]int{"points":points}
 	json.NewEncoder(w).Encode(response)
+}
+
+// Helper function to validate receipt input
+func validateReceiptInput(receipt Receipt)(bool, map[string]string) {
+	errorMap := make(map[string]string)
+	// Verify purchase date is in YYYY-MM-DD format
+	_, errYear := strconv.Atoi(string(receipt.PurchaseDate[:4]));
+	_, errMonth := strconv.Atoi(string(receipt.PurchaseDate[5:7]))
+	_, errDay := strconv.Atoi(string(receipt.PurchaseDate[8:]))
+	if (len(receipt.PurchaseDate) != 10 || 
+			string(receipt.PurchaseDate[4]) != "-" || 
+			string(receipt.PurchaseDate[7]) != "-" ||
+			errYear != nil ||
+			errMonth != nil ||
+			errDay != nil) {
+		errorMap["purchaseDate"] = "Invalid input: " + receipt.PurchaseDate
+	}
+	// Verify purchase time is in hh:mm format
+	_, errHour := strconv.Atoi(string(receipt.PurchaseTime[0:2]))
+	_, errMin := strconv.Atoi(string(receipt.PurchaseTime[3:]))
+	if (len(receipt.PurchaseTime) != 5 || 
+			string(receipt.PurchaseTime[2]) != ":" || 
+			errHour != nil || 
+			errMin != nil) {
+		errorMap["purchaseTime"] = "Invalid input: " + receipt.PurchaseTime
+	}
+	// Verify total is a float and ends in .xx
+	_, err := strconv.ParseFloat(receipt.Total, 64)
+	if (err != nil || (string(receipt.Total[len(receipt.Total)-3]) != ".")) {
+		errorMap["total"] = "Invalid input: " + receipt.Total
+	}
+
+	if (len(errorMap) != 0) {
+		errorMap["error"] = "Receipt JSON contains invalid inputs"
+		return false, errorMap
+	}
+	// No errors found
+	return true, errorMap
 }
 
 // Helper function to get receipt with specified id
