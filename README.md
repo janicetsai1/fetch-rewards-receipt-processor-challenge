@@ -11,12 +11,12 @@ Data does not need to persist when your application stops. It is sufficient to s
 ## Instructions to Run
 There are two ways to interact with my server. You can either run the app locally or build and run the docker image. See below for instructions on how to run it both ways.
 ### Running the app locally
-Run `go build`
-Run `./mywebapp`
-The server is now running! Make GET and POST requests, served at: http://localhost:5000/
-I used Postman to make GET and POST requests. See examples below:
-POST: http://localhost:5000/receipts/process/
-GET: http://localhost:5000/receipts/{id}/points/
+Run `go build` <br />
+Run `./mywebapp` <br />
+The server is now running! Make GET and POST requests, served at: http://localhost:5000/ <br />
+I used Postman to make GET and POST requests. See examples below: <br />
+POST: http://localhost:5000/receipts/process/ <br />
+GET: http://localhost:5000/receipts/{id}/points/ <br />
 
 ### Building and Running Docker Image
 Build the image by running `docker build -t go-docker .`
