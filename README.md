@@ -19,8 +19,8 @@ POST: http://localhost:5000/receipts/process/ <br />
 GET: http://localhost:5000/receipts/{id}/points/ <br />
 
 ### Building and Running Docker Image
-Build the image by running `docker build -t go-docker .`
-Run docker image by running `docker run -d -p 5000:5000 go-docker`
+Build the image by running `docker build -t go-docker .` <br />
+Run docker image by running `docker run -d -p 5000:5000 go-docker` <br />
 Interact with app running inside of container and make GET and POST requests, served at: http://localhost:5000/
 
 ## Language Selection
