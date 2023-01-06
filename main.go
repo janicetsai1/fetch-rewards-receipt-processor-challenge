@@ -2,14 +2,15 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/google/uuid"
 	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
-	"github.com/gorilla/mux"
 	"strconv"
 	"strings"
+
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 // Receipt Structure Definition
