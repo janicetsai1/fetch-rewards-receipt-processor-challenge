@@ -8,6 +8,21 @@ Provide any instructions required to run your application.
 
 Data does not need to persist when your application stops. It is sufficient to store information in memory. There are too many different database solutions, we will not be installing a database on our system when testing your application.
 
+## Instructions to Run
+There are two ways to interact with my server. You can either run the app locally or build and run the docker image. See below for instructions on how to run it both ways.
+### Running the app locally
+Run `go build`
+Run `./mywebapp`
+The server is now running! Make GET and POST requests, served at: http://localhost:5000/
+I used Postman to make GET and POST requests. See examples below:
+POST: http://localhost:5000/receipts/process/
+GET: http://localhost:5000/receipts/{id}/points/
+
+### Building and Running Docker Image
+Build the image by running `docker build -t go-docker .`
+Run docker image by running `docker run -d -p 5000:5000 go-docker`
+Interact with app running inside of container and make GET and POST requests, served at: http://localhost:5000/
+
 ## Language Selection
 
 You can assume our engineers have Go and Docker installed to run your application. Go is our preferred language, but it is not a requirement for this exercise.
